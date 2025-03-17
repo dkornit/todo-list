@@ -30,7 +30,7 @@
               ,
             {% endif %}
           {% endfor %}
-          <a href="{% url 'tapp:task-update' pk=task.id %}" >
+          <a href="{% url 'app:task-update' pk=task.id %}" >
             Update
           </a>
           <a href="{% url 'app:task-delete' pk=task.id %}" >
