@@ -14,12 +14,15 @@
           {{ task.content }}
           {% if task.is_done %}
             <span style="color: green; font-weight: bold">Done</span>
-
-            <a href="{% url 'app:undo-task' task.id %}" class="btn btn-secondary float-end">Undo</a>
+            <form action="{% url 'app:complete-task' task.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-secondary float-end">Complete</button>
+            </form>
           {% else %}
-            <span style="color: red; font-weight: bold">Not done</span>
-
-            <a href="{% url 'app:complete-task' task.id %}" class="btn btn-success float-end">Complete</a>
+            <form action="{% url 'app:undo-task' task.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-secondary float-end">Undo</button>
+            </form>
           {% endif %}
         </li>
         <li>Created: {{ task.created_at|date:"d.m.Y H:i:s" }}</li>

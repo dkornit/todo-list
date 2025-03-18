@@ -1,6 +1,6 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views import generic
+from django.views import generic, View
 from app.models import Task, Tag
 
 
@@ -46,16 +46,17 @@ class TagDeleteView(generic.DeleteView):
     success_url = reverse_lazy("app:task-list")
 
 
+class TaskStatusUpdateView(View):
+    status = None
 
-def complete_task(request, task_id):
-    task = Task.objects.get(id=task_id)
-    task.is_done = True
-    task.save()
-    return redirect("todo_app:task-list")
+    def post(self, request, task_id):
+        task = get_object_or_404(Task, id=task_id)
+        task.is_done = self.status
+        task.save()
+        return redirect("app:task-list")
 
+class CompleteTaskView(TaskStatusUpdateView):
+    status = True
 
-def undo_task(request, task_id):
-    task = Task.objects.get(id=task_id)
-    task.is_done = False
-    task.save()
-    return redirect("todo_app:task-list")
+class UndoTaskView(TaskStatusUpdateView):
+    status = False
